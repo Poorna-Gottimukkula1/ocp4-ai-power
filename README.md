@@ -1,22 +1,32 @@
+# **Table of Contents**
+
+- [**Table of Contents**](#table-of-contents)
+- [Introduction](#introduction)
+- [Automation Host Prerequisites](#automation-host-prerequisites)
+- [PowerVC Prerequisites](#powervc-prerequisites)
+- [OCP Install](#ocp-install)
+
+
 # Introduction
-The `ocp4-ai-power` [project](https://github.com/ocp-power-automation/ocp4-ai-power) provides Terraform based automation code to help the deployment of OpenShift Container Platform (OCP) 4.x on PowerVM systems with Agent-based installer, assisted installer and SNO. It can be used for IBM PowerVS, PowerVC and HMC. The difference between this playbook and other UPI playbooks is it uses net boot or bootp method for OCP installation.
+The `ocp4-ai-power/tf-powervc` [project](https://github.com/ocp-power-automation/ocp4-ai-power) provides Terraform based automation code to help the deployment of OpenShift Container Platform (OCP) 4.x on PowerVM systems managed by PowerVC.
 
 !!! Note
         For bugs/enhancement requests etc. please open a GitHub [issue](https://github.com/ocp-power-automation/ocp4-ai-power/issues)
 
-# Directory structure
-There are 5 subdirectories for `ocp4-ai-power`:
-- ansible-bastion -- ansible play book to setup bastion, create OCP configuration and perform OCP installation and customization
-- data -- default place to store private, public key and pull secret
-- tf-common -- Common modules for terraform
-- tf-powervc -- Terraform modules for PowerVC, it is the working directory for PowerVC
-- tf-powervs -- Terraform modules for PowerVS, it is the working directory for PowerVS (WIP)  
+# Automation Host Prerequisites
 
-# For PowerVC
+The automation needs to run from a system with internet access. This could be your laptop or a VM with public internet connectivity. This automation code has been tested on the following 64-bit Operating Systems:
+- Mac OSX (Darwin)
+- Linux (x86_64/ppc64le)
+- Windows 10
 
-Follow the [guide](tf-powervc/README.md) for OCP installation on PowerVM LPARs managed via PowerVC
+Follow the [guide](docs/automation_host_prereqs.md) to complete the prerequisites.
 
-# For PowerVS (WIP)
 
-Follow the [guide](tf-powervs/README.md) for OCP installation on PowerVM LPARs managed via PowerVS (this part is not work yet)
+# PowerVC Prerequisites
 
+Follow the [guide](docs/ocp_prereqs_powervc.md) to complete the PowerVC prerequisites.
+
+# OCP Install
+
+Follow the [quickstart](docs/quickstart.md) guide for OCP installation on PowerVM LPARs managed via PowerVC

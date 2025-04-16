@@ -192,13 +192,13 @@ variable "keypair_name" {
 
 variable "public_key_file" {
   description = "Path to public key file"
-  # if empty, will default to ${path.cwd}/../data/id_rsa.pub
+  # if empty, will default to ${path.cwd}/data/id_rsa.pub
   default = ""
 }
 
 variable "private_key_file" {
   description = "Path to private key file"
-  # if empty, will default to ${path.cwd}/../data/id_rsa
+  # if empty, will default to ${path.cwd}/data/id_rsa
   default = ""
 }
 
@@ -318,8 +318,8 @@ variable "ansible_repo_name" {
 }
 
 locals {
-  private_key_file = var.private_key_file == "" ? "${path.cwd}/../data/id_rsa" : var.private_key_file
-  public_key_file  = var.public_key_file == "" ? "${path.cwd}/../data/id_rsa.pub" : var.public_key_file
+  private_key_file = var.private_key_file == "" ? "${path.cwd}/data/id_rsa" : var.private_key_file
+  public_key_file  = var.public_key_file == "" ? "${path.cwd}/data/id_rsa.pub" : var.public_key_file
   private_key      = var.private_key == "" ? file(coalesce(local.private_key_file, "/dev/null")) : var.private_key
   public_key       = var.public_key == "" ? file(coalesce(local.public_key_file, "/dev/null")) : var.public_key
   create_keypair   = var.keypair_name == "" ? "1" : "0"
@@ -358,7 +358,7 @@ variable "release_image_override" {
 }
 
 variable "pull_secret_file" {
-  default = "../data/pull-secret.txt"
+  default = "./data/pull-secret.txt"
 }
 # Must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 variable "cluster_domain" {

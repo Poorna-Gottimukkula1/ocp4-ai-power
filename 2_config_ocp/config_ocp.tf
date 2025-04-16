@@ -181,7 +181,7 @@ resource "null_resource" "config" {
   }
 
   provisioner "file" {
-    source      = "${path.root}/../ansible-bastion/"
+    source      = "${path.root}/ansible-bastion/"
     destination = "ansible-bastion"
   }
 

@@ -25,7 +25,7 @@ All further instructions assumes you are in the code directory eg. `ocp4-upi-pow
 
 ## Setup Terraform Variables
 
-Update the [var.tfvars](../var.tfvars) based on your environment. Description of the variables are available in [var.tfvars-doc](./var.tfvars-doc.md).
+Update the [var.tfvars](./var.tfvars) based on your environment. Description of the variables are available in [var.tfvars-doc](./var.tfvars-doc.md).
 You can use environment variables for sensitive data that should not be saved to disk.
 
 ```

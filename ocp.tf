@@ -71,7 +71,7 @@ module "network" {
 
 module "setup_bastion" {
   depends_on = [module.bastion]
-  source = "../tf-common/1_setup_bastion"
+  source = "./1_setup_bastion"
 
   cluster_id                      = local.cluster_id
   cluster_domain                  = var.cluster_domain
@@ -98,7 +98,7 @@ module "setup_bastion" {
 
 module "config_ocp" {
   depends_on = [module.setup_bastion, module.network]
-  source = "../tf-common/2_config_ocp"
+  source = "./2_config_ocp"
 
   target                    = "powervc"
   cluster_domain            = var.cluster_domain
@@ -221,7 +221,7 @@ module "workernodes" {
 
 module "install" {
   depends_on = [module.bootstrapnode, module.masternodes, module.workernodes]
-  source     = "../tf-common/3_install_ocp"
+  source     = "./3_install_ocp"
 
   cluster_domain        = var.cluster_domain
   cluster_id            = local.cluster_id

@@ -11,7 +11,7 @@
 ## Introduction
 
 This guide gives an overview of the various terraform variables that are used for the deployment.
-The default values are set in [variables.tf](../variables.tf)
+The default values are set in [variables.tf](./variables.tf)
 
 ### PowerVC Details
 

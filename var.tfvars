@@ -1,58 +1,44 @@
-### IBM Cloud details
+### PowerVC Details
+auth_url                    = "<https://<HOSTNAME>:5000/v3/>"
+user_name                   = "<powervc-login-user-name>"
+password                    = "<powervc-login-user-password>"
+tenant_name                 = "<tenant_name>"
+domain_name                 = "Default"
+openstack_availability_zone = ""
 
-ibmcloud_api_key    = "<key>"
-ibmcloud_region     = "<region>"
-ibmcloud_zone       = "<zone>"
-service_instance_id = "<cloud_instance_ID>"
+network_name = "<network_name>"
 
 ### OpenShift Cluster Details
+bastion   = { instance_type = "<bastion-compute-template>", image_id = "<image-uuid-rhel>", "count" = 1 }
+bootstrap = { instance_type = "<bootstrap-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 0 }
+master    = { instance_type = "<master-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 3 }
+worker    = { instance_type = "<worker-compute-template>", image_id = "<image-uuid-rhcos>", "count" = 2 }
+# With all optional attributes
+# bastion                     = {instance_type    = "<bastion-compute-template>",   image_id    = "<image-uuid-rhel>",   availability_zone = "<availability zone>",  "count"   = 1, fixed_ip_v4 = "<IPv4 address>"}
+# bootstrap                   = {instance_type    = "<bootstrap-compute-template>", image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 1}
+# master                      = {instance_type    = "<master-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 3, data_volume_count  = 0, data_volume_size  = 100}
+# worker                      = {instance_type    = "<worker-compute-template>",    image_id    = "<image-uuid-rhcos>",  availability_zone = "<availability zone>",  "count"   = 2, data_volume_count  = 0, data_volume_size  = 100}
 
-### This is default minimalistic config. For PowerVS processors are equal to entitled physical count
-### So N processors == N physical core entitlements == ceil[N] vCPUs.
-### Example 0.5 processors == 0.5 physical core entitlements == ceil[0.5] = 1 vCPU == 8 logical OS CPUs (SMT=8)
-### Example 1.5 processors == 1.5 physical core entitlements == ceil[1.5] = 2 vCPU == 16 logical OS CPUs (SMT=8)
-### Example 2 processors == 2 physical core entitlements == ceil[2] = 2 vCPU == 16 logical OS CPUs (SMT=8)
-bastion   = { memory = "16", processors = "1", "count" = 1 }
-bootstrap = { memory = "32", processors = "0.5", "count" = 0 }
-master    = { memory = "32", processors = "0.5", "count" = 3 }
-worker    = { memory = "32", processors = "0.5", "count" = 2 }
-#With additional attributes
-#master    = { memory = "32", processors = "0.5", "count" = 3, data_volume_count  = 0, data_volume_size  = 100 }
-#worker    = { memory = "32", processors = "0.5", "count" = 2, data_volume_count  = 0, data_volume_size  = 100 }
-
-rhel_image_name  = "rhel-8.3"
-rhcos_image_name = "empty-disk-image"
-
-### Provide these parameters if RHCOS image needs to be imported from public bucket of cloud object storage to PVS.
-### When this is provided, data provided through parameter "rhcos_image_name" will be ignored.
-rhcos_import_image              = false # true/false (default=false).
-rhcos_import_image_filename     = "rhcos-410-84-202201251004-0-ppc64le-powervs.ova.gz"
-rhcos_import_image_storage_type = "tier1" # tier1/tier3 (default=tier1) Storage type in PowerVS
-
-processor_type = "shared"
-system_type    = "s922"
-network_name   = "ocp-net"
-
-cluster_domain    = "ibm.com"  #Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
-cluster_id_prefix = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
-cluster_id        = ""         # It will use random generated id with cluster_id_prefix if this is not set
-
-use_zone_info_for_names = true # If set it to false, the zone info would not be used in resource names on PowerVS.
-#fips_compliant      = false   # Set it true if you prefer to use FIPS enable in ocp deployment
 
 rhel_username                   = "root" #Set it to an appropriate username for non-root user access
-connection_timeout              = 30     # minutes
-public_key_file                 = "../data/id_rsa.pub"
-private_key_file                = "../data/id_rsa"
+public_key_file                 = "./data/id_rsa.pub"
+private_key_file                = "./data/id_rsa"
 rhel_subscription_username      = "<subscription-id>"       #Leave this as-is if using CentOS as bastion image
 rhel_subscription_password      = "<subscription-password>" #Leave this as-is if using CentOS as bastion image
 rhel_subscription_org           = ""                        # Define it only when using activationkey for RHEL subscription
 rhel_subscription_activationkey = ""                        # Define it only when using activationkey for RHEL subscription
-rhel_smt                        = 4
+
+connection_timeout = 45
+jump_host          = ""
+
+cluster_domain    = "ibm.com"  # Set domain to nip.io or xip.io if you prefer using online wildcard domain and avoid modifying /etc/hosts
+cluster_id_prefix = "test-ocp" # Set it to empty if just want to use cluster_id without prefix
+cluster_id        = ""         # It will use random generated id with cluster_id_prefix if this is not set
+#fips_compliant             = false   # Set it true if you prefer to use FIPS enable in ocp deployment
 
 #################################
 # define the install type: agent based install, assisted install or SNO
-install_type: "agent"
+install_type = "agent"
 
 #################################
 # variables for assisted install
@@ -62,11 +48,12 @@ assisted_rhcos_version = "4.15"
 assisted_url = "https://api.openshift.com/api/assisted-install/v2"
 assisted_token = "xxx..."
 
+
 ### OpenShift Installation Details
 
 openshift_install_tarball = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz"
 openshift_client_tarball  = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/stable/openshift-client-linux.tar.gz"
-pull_secret_file          = "../data/pull-secret.txt"
+pull_secret_file          = "./data/pull-secret.txt"
 
 ### OpenShift RHCOS image files
 openshift_rhcos_iso       = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/latest/rhcos-live.ppc64le.iso"
@@ -75,16 +62,13 @@ openshift_rhcos_initramfs = "https://mirror.openshift.com/pub/openshift-v4/ppc64
 openshift_rhcos_rootfs    = "https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/latest/rhcos-installer-rootfs.ppc64le.img"
 
 
-### Using IBM Cloud Services
-#use_ibm_cloud_services    = true
-#ibm_cloud_vpc_name        = "ocp-vpc"
-#ibm_cloud_vpc_subnet_name = "ocp-subnet"
-#iaas_classic_username     = "apikey"     # Can be passed via environment variable IAAS_CLASSIC_USERNAME
-#iaas_classic_api_key      = ""           # if empty, will default to ibmcloud_api_key. Can be passed via environment variable IAAS_CLASSIC_API_KEY
-#iaas_vpc_region       = ""               # if empty, will default to ibmcloud_region.
-
 
 ### Misc Customizations
+
+#network_type               = "SRIOV"
+#scg_id                     = "df21cec9-c244-4d3d-b927-df1518672e87"
+#sriov_vnic_failover_vfs    = 1
+#sriov_capacity             = 0.02
 
 #enable_local_registry      = false  #Set to true to enable usage of local registry for restricted network install.
 #local_registry_image       = "docker.io/ibmcom/registry-ppc64le:2.6.2.5"
@@ -93,19 +77,17 @@ openshift_rhcos_rootfs    = "https://mirror.openshift.com/pub/openshift-v4/ppc64
 #release_image_override     = ""
 
 
-#helpernode_repo            = "https://github.com/redhat-cop/ocp4-helpernode"
+#helpernode_repo            = "https://github.com/RedHatOfficial/ocp4-helpernode"
 #helpernode_tag             = ""
 #install_playbook_repo      = "https://github.com/ocp-power-automation/ocp4-playbooks"
 #install_playbook_tag       = ""
 
-#bastion_health_status      = "OK"
 #installer_log_level        = "info"
 #ansible_extra_options      = "-v"
 #ansible_repo_name          = "ansible-2.9-for-rhel-8-ppc64le-rpms"
 #dns_forwarders             = "1.1.1.1; 9.9.9.9"
 #rhcos_pre_kernel_options   = []
 #rhcos_kernel_options       = []
-#node_labels                = {}
 #chrony_config              = true
 #chrony_config_servers      = [ {server = "0.centos.pool.ntp.org", options = "iburst"}, {server = "1.centos.pool.ntp.org", options = "iburst"} ]
 
@@ -115,13 +97,17 @@ openshift_rhcos_rootfs    = "https://mirror.openshift.com/pub/openshift-v4/ppc64
 #proxy                      = {server = "hostname_or_ip", port = "3128", user = "pxuser", password = "pxpassword"}
 
 
-#storage_type               = "nfs"
-#volume_size                = "300"    #Value in GB
-#volume_shareable           = false
+# mount_etcd_ramdisk  = false
 
-#upgrade_image              = "" #quay.io/openshift-release-dev/ocp-release@sha256:xyz.."
+
+#storage_type                = "nfs"
+#volume_size                 = "300" # Value in GB
+#volume_storage_template     = ""
+
 #upgrade_version            = ""
-#upgrade_pause_time         = "70"
+#upgrade_channel            = ""  #(stable-4.x, fast-4.x, candidate-4.x) eg. stable-4.11
+#upgrade_image               = "" #quay.io/openshift-release-dev/ocp-release@sha256:xyz.."
+#upgrade_pause_time         = "90"
 #upgrade_delay_time         = "600"
 
 #eus_upgrade_version        = ""
@@ -129,22 +115,19 @@ openshift_rhcos_rootfs    = "https://mirror.openshift.com/pub/openshift-v4/ppc64
 #eus_upgrade_image          = ""  #(quay.io/openshift-release-dev/ocp-release@sha256:xyz..)
 #eus_upstream               = ""  #https://ppc64le.ocp.releases.ci.openshift.org/graph
 
-#ibm_cloud_dl_endpoint_net_cidr = ""  #Set this to IBM Cloud DirectLink endpoint network cidr eg. 10.0.0.0/8
-#ibm_cloud_http_proxy = ""            #Set this to IBM Cloud http/squid proxy eg. http://10.166.13.64:3128
-
 #cni_network_provider       = "OVNKubernetes"
-
-#setup_snat                 = true
-
-#csi_driver_install         = false  #Set to true to enable installation of csi-driver.
+#cluster_network_cidr        = "10.128.0.0/14"
+#cluster_network_hostprefix  = "23"
+#service_network             = "172.30.0.0/16"
+#private_network_mtu         = "1450"
 
 #luks_compliant              = false # Set it true if you prefer to use LUKS enable in OCP deployment
-#luks_config                 = [ { thumbprint = "", url = "" }, { thumbprint = "", url = "" }, { thumbprint = "", url = "" } ]
+#luks_config                 = [ { thumbprint = "", url = "" } ]
 #luks_filesystem_device      = "/dev/mapper/root"  #Set the Path of device to be luks encrypted
 #luks_format                 = "xfs"  #Set the Format of the FileSystem to be luks encrypted
 #luks_wipe_filesystem         = true  #Configures the FileSystem to be wiped
 #luks_device                 = "/dev/disk/by-partlabel/root"  #Set the Path of luks encrypted partition
-#luks_label                  = "luks-root"  #Set the value for user label of luks encrpted partition
+#luks_label                  = "luks-root"  #Set the value for user label of luks encrypted partition
 #luks_options                = ["--cipher", "aes-cbc-essiv:sha256"]  #Set List of luks options for the luks encryption
 #luks_wipe_volume             = true  #Configures the luks encrypted partition to be wiped
 #luks_name                   = "root" #Set the value for the user label of Filesystem to be luks encrypted

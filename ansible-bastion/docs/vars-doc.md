@@ -1,6 +1,6 @@
 # How to use vars.yaml
 
-This page gives you an explanation of the variables found in the [vars.yaml](../example-vars.yaml) example given in this repo to help you formulate your own/edit the provided example.
+This page gives you an explanation of the variables found in the [vars.yaml](./example-vars.yaml) example given in this repo to help you formulate your own/edit the provided example.
 
 
 ## Disk to install RHCOS
