@@ -44,7 +44,7 @@
     chdir: "{{ workdir }}"
 
 - name: Copy pxe files to right place
-  when: install_type == "agent"
+  when: install_type == "agent" or install_type == "assisted"
   block:
   - name: Host initramfs.img
     become: true
